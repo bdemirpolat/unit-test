@@ -2,11 +2,10 @@ package main
 
 import (
 	"database/sql"
-	"flag"
 	"fmt"
-	"github.com/bdemirpolat/unit-test/models"
-	"github.com/bdemirpolat/unit-test/repository"
-	"github.com/gofiber/fiber/v2"
+	"log"
+	"testing"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -22,43 +21,40 @@ func connectDB() *sql.DB {
 	return db
 }
 
-func createTable(db *sql.DB) (sql.Result, error) {
-	res, err := db.Exec("CREATE TABLE `users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`username` VARCHAR(64) NULL);")
-	return res, err
+func main() {
+	fmt.Println(Sum(5, 5))
 }
 
-func main() {
+func Sum(a int, b int) int {
+	return a + b
+}
+
+func TestSum(t *testing.T) {
+	total := Sum(5, 5)
+	if total != 10 {
+		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, 10)
+	}
+
+}
+
+func AddMigration() {
 	db := connectDB()
-	create := flag.Bool("create-table", false, "create table")
-	flag.Parse()
-	if *create {
-		_, err := createTable(db)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Println("table created")
+
+	defer db.Close()
+
+	createAlbumTable := `CREATE TABLE user (
+		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+		"firstname" TEXT,
+		"lastname" TEXT,
+		"email" TEXT,
+	  );`
+
+	_, err := db.Exec(createAlbumTable)
+
+	if err != nil {
+		log.Printf("%q: %s\n", err, createAlbumTable)
 		return
 	}
 
-	userRepo := &repository.UserRepo{DB: db}
-	app := fiber.New()
-	app.Post("/users", func(c *fiber.Ctx) error {
-		user := models.User{}
-		err := c.BodyParser(&user)
-		if err != nil {
-			return err
-		}
-		err = userRepo.Create(user)
-		if err != nil {
-			return err
-		}
-		return c.Status(fiber.StatusOK).JSON(user)
-	})
-
-	err := app.Listen(":3000")
-	if err != nil {
-		panic(err)
-	}
-
+	log.Println("Migration finished...")
 }
