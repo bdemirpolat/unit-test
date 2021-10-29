@@ -84,7 +84,7 @@ ok      github.com/bdemirpolat/unit-test        0.466s
 
 ```
 
-`go test -v` komutunu kullanarak daha fazla bilgi ile test sonuçlarını ekrana yazdırabilirsiniz.
+`go test -v` komutunu kullanarak daha fazla bilgi ile test sonuçlarını ekrana yazdırabilirsiniz. (-v flag'i verbose yani ayrıntılı anlamındaıdır)
 ```
 === RUN   Test_SayHello_ValidArgument
     greeting_test.go:49: "sayHello(Yemeksepeti)" succeded, expected -> Hello Yemeksepeti!, got -> Hello Yemeksepeti!
@@ -93,7 +93,7 @@ PASS
 ok      github.com/bdemirpolat/unit-test        0.466s
 ```
 
-Şimdi `sayHello` fonksiyonumuzda bir değişiklik yapalım ve testimizin fail olmasını sağlayalım. *Hello* olan yerleri *Hola* olarak değiştirelim ve tekrar testimizi çalıştırıp sonuçları görelim
+Şimdi `sayHello` fonksiyonumuzda bir değişiklik yapalım ve testimizin fail olmasını sağlayalım. *Hello* olan yerleri *Hola* olarak değiştirelim ve tekrar testimizi çalıştırıp sonuçları görelim :)
 ```
 ...
 
@@ -106,14 +106,14 @@ func sayHello(name string) string {
 }
 ```
 
-`go test -v` komutunu terminalde çalıştıralım
+`go test -v` komutunu terminalde çalıştırdığımızda elde edeceğimiz sonuç
 ```
 === RUN   Test_SayHello_ValidArgument
     greeting_test.go:47: "sayHello(Yemeksepeti)" failed, expected -> Hello Yemeksepeti!, got -> Hola Yemeksepeti!
 --- FAIL: Test_SayHello_ValidArgument (0.00s)
 ```
 
-Bir dosya içerisinde birden fazla test fonksiyonlarımız olabilir demiştik. greeting.go dosyasına sayGoodBye diye bir fonksiyon ekleyelim. Bu fonksiyonda aynı sayHello fonksiyonu gibi string türünde bir argüman alacak ve geriye string dönen basit işlevi olacak.
+Bir dosya içerisinde birden fazla test fonksiyonlarımız olabilir demiştik. greeting.go dosyasına `sayGoodBye` diye bir fonksiyon ekleyelim. Bu fonksiyonda aynı `sayHello` fonksiyonu gibi string türünde bir argüman alacak ve geriye string dönen basit bir işlevi olacak.
 ```
 ...
 
@@ -126,7 +126,7 @@ func sayGoodBye(name string) string {
 
 ```
 
-sayGoodBye fonksiyonuzun testini greeting_test.go dosyasına ekleyelim. 
+`sayGoodBye` fonksiyonuzun testini **greeting_test.go** dosyasına ekleyelim. 
 ```
 func Test_SayGoodBye(t *testing.T) {
 	name := "Yemeksepeti"
@@ -141,7 +141,7 @@ func Test_SayGoodBye(t *testing.T) {
 }
 ```
 
-greeting_test.go dosyasında birden fazla testimiz oldu. Terminalde `go test -v` komutunu çalıştırdığımızda aşağıdaki sonucu elde edeceğiz.
+**greeting_test.go** dosyasında birden fazla testimiz oldu. Terminalde `go test -v` komutunu çalıştırdığımızda aşağıdaki sonucu elde edeceğiz.
 
 ```
 === RUN   Test_SayHello_ValidArgument
@@ -165,19 +165,27 @@ PASS
 # Table-Driven Test Yaklaşımı
 *Unit testimizi birden fazla girdi ve girdilerin beklenen sonuçları ile test etmek isteyebiliriz. Test etmek istediğimiz girdiler için array oluşturup bu arrayın her bir elamanı ile testler yapabilmemizi sağlar. Yazdığımız unit testleri farklı kombinasyonlar deneyerek test edebilmemizi sağlayan bir yaklaşımdır.*
 
-Test_SayHello_Valid_Argument fonksiyonunu Table-Driven Test yaklaşımına çevirelim. Input adında bir string array tanımlıyoruz ve test etmek istediğimiz girdileri string array içine alıyoruz artık foor-loop iterasyonu ile her bir elemanı test edebiliriz.
+Test_SayHello_Valid_Argument fonksiyonunu Table-Driven Test yaklaşımına çevirelim. Input adında bir struct array tanımlıyoruz ve test etmek istediğimiz girdileri ve girdilerden beklenen sonucu array içine alıyoruz. Artık foor-loop iterasyonu ile her bir elemanı test edebiliriz.
 
 ```
+
 func Test_SayHello_Valid_Argument(t *testing.T) {
-	inputs := []string{"Yemeksepeti", "Banabi", "Yemek"}
+	inputs := []struct {
+		name   string
+		result string
+	}{
+		{name: "Yemeksepeti", result: "Hello Yemeksepeti!"},
+		{name: "Banabi", result: "Hello Banabi!"},
+		{name: "Yemek", result: "Hello Yemek!"},
+	}
 
 	for _, item := range inputs {
-		expected := fmt.Sprintf("Hello %s!", item)
-		result := sayHello(item)
-		if result != expected {
-			t.Errorf("\"sayHello(%s)\" failed, expected -> %v, got -> %v", item, expected, result)
+
+		result := sayHello(item.name)
+		if result != item.result {
+			t.Errorf("\"sayHello(%s)\" failed, expected -> %v, got -> %v", item, item.result, result)
 		} else {
-			t.Logf("\"sayHello(%s)\" succeded, expected -> %v, got -> %v", item, expected, result)
+			t.Logf("\"sayHello(%s)\" succeded, expected -> %v, got -> %v", item, item.result, result)
 		}
 	}
 }
@@ -192,6 +200,32 @@ func Test_SayHello_Valid_Argument(t *testing.T) {
 --- PASS: Test_SayHello_Valid_Argument (0.00s)
 PASS
 ok      github.com/bdemirpolat/unit-test        0.441s
+```
+
+Belirli bir *_test.go dosyasını test edebiliriz. Ancak derleme sırasında test dosyamızın ihtiyacı olan package varsa onu da dahil etmemiz gerekiyor.
+`go test -v greeting_test.go` komutu çalıştırdığımızda hata ile karşılaşacağız
+```
+# command-line-arguments [command-line-arguments.test]
+./greeting_test.go:44:12: undefined: sayHello
+./greeting_test.go:66:13: undefined: sayHello
+./greeting_test.go:78:12: undefined: sayGoodBye
+FAIL    command-line-arguments [build failed]
+FAIL
+```
+
+**greeting_test.go** dosyası test ettiği fonksiyonlar **greeting.go** dosyasında olduğu için `go test -v greeting_test.go` komutuna **greeting.go** dosyasını dahil etmemiz gerekiyor. 
+`go test -v greeting_test.go greeting.go` komutu çalıştırdığımızda testler çalışcak ve aşağıdaki sonucu elde edeceğiz.
+```
+=== RUN   Test_SayHello_Valid_Argument
+    greeting_test.go:70: "sayHello({Yemeksepeti Hello Yemeksepeti!})" succeded, expected -> Hello Yemeksepeti!, got -> Hello Yemeksepeti!
+    greeting_test.go:70: "sayHello({Banabi Hello Banabi!})" succeded, expected -> Hello Banabi!, got -> Hello Banabi!
+    greeting_test.go:70: "sayHello({Yemek Hello Yemek!})" succeded, expected -> Hello Yemek!, got -> Hello Yemek!
+--- PASS: Test_SayHello_Valid_Argument (0.00s)
+=== RUN   Test_SayGoodBye
+    greeting_test.go:83: "sayGoodBye(Yemeksepeti)" succeded, expected -> Bye Bye Yemeksepeti!, got -> Bye Bye Yemeksepeti!
+--- PASS: Test_SayGoodBye (0.00s)
+PASS
+ok      command-line-arguments  0.209s
 ```
 
 # Test Coverage
