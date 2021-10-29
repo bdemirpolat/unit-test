@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -22,18 +21,7 @@ func connectDB() *sql.DB {
 }
 
 func main() {
-	fmt.Println(Sum(5, 5))
-}
-
-func Sum(a int, b int) int {
-	return a + b
-}
-
-func TestSum(t *testing.T) {
-	total := Sum(5, 5)
-	if total != 10 {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, 10)
-	}
+	fmt.Println(sayHello("Mertaaa"))
 
 }
 

@@ -1,0 +1,15 @@
+mode: set
+github.com/bdemirpolat/unit-test/greeting.go:7.35,8.20 1 1
+github.com/bdemirpolat/unit-test/greeting.go:12.2,12.20 1 1
+github.com/bdemirpolat/unit-test/greeting.go:16.2,16.39 1 1
+github.com/bdemirpolat/unit-test/greeting.go:8.20,10.3 1 1
+github.com/bdemirpolat/unit-test/greeting.go:12.20,14.3 1 0
+github.com/bdemirpolat/unit-test/main.go:11.26,13.16 2 0
+github.com/bdemirpolat/unit-test/main.go:16.2,17.16 2 0
+github.com/bdemirpolat/unit-test/main.go:20.2,20.11 1 0
+github.com/bdemirpolat/unit-test/main.go:13.16,14.13 1 0
+github.com/bdemirpolat/unit-test/main.go:17.16,18.13 1 0
+github.com/bdemirpolat/unit-test/main.go:23.13,26.2 1 0
+github.com/bdemirpolat/unit-test/main.go:28.21,42.16 5 0
+github.com/bdemirpolat/unit-test/main.go:47.2,47.38 1 0
+github.com/bdemirpolat/unit-test/main.go:42.16,45.3 2 0
