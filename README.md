@@ -263,7 +263,8 @@ Go projemizin dosya yapısı
      * main.go
 
 Oluşan cover_out.html dosyasını herhangi bir web browser ile açtığınızda kodumuzun hangi taraflarını test ettiğimizi ve hangi taraflarını test etmediğimizi görsel bir şekilde görebilirsiniz. Kırmızı ile vurgulananlar test tarafından ele alınmadığını anlamına gelir.
-![Image of Cover](https://octodex.github.com/images/cover_out.png)
+
+![Image of Cover](https://github.com/bdemirpolat/unit-test/blob/go-test-basics/images/cover_out_result.png)
 
 
 # Golang testleri çalıştırma komutları
