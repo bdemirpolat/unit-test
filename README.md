@@ -239,7 +239,7 @@ ok      command-line-arguments  0.206s  coverage: 66.7% of statements
 ```
 Testlerimiz başarılı bir şekilde geçti ama yazdığımızın kodun %66.7 si test tarafından ele alınmış. Bu noktada neyi gözden kaçırdığımızı bilmemiz gerekiyor.
 
-Go -coverprofile flag'i ile bizlere test kapsam sonuçlarını bir dosyaya aktarmamızı sağlar. Bunun go test komutu ile -coverprofile flag'ini birleştirmemiz gerekiyor.
+Go `-coverprofile` flag'i ile bizlere test kapsam sonuçlarını bir dosyaya aktarmamızı sağlar. Bunun `go test` komutu ile `-coverprofile` flag'ini birleştirmemiz gerekiyor.
 
 `go test -coverprofile=cover_out` komutunu çalıştırıdğımızda geçerli dizinde cover_out dosyası oluşur.
 
@@ -250,9 +250,9 @@ Go projemizin dosya yapısı
      * greeting.go
      * main.go
 
-Oluşan dosyayı bizim için daha anlamlı hale getirebiliriz. Go'nun built-in gelen `go tool` komutu ile oluşan cover_out dosyasını html formata dönüştürerek web browser üzerinde görüntülememizi sağlar.
+Oluşan dosyayı bizim için daha anlamlı hale getirebiliriz. Go'nun built-in gelen `go tool` komutu ile oluşan *cover_out* dosyasını html formata dönüştürerek web browser üzerinde görüntülememizi sağlar.
 
-`go tool cover -html=cover_out -o cover_out.html` komutunu çalıştırdığımızda geçerli dizinde cover_out.html dosyasının oluştuğunu göreceksiniz. 
+`go tool cover -html=cover_out -o cover_out.html` komutunu çalıştırdığımızda geçerli dizinde *cover_out.html* dosyasının oluştuğunu göreceksiniz. 
 
 Go projemizin dosya yapısı
 * unit-test
@@ -262,9 +262,11 @@ Go projemizin dosya yapısı
      * greeting.go
      * main.go
 
-Oluşan cover_out.html dosyasını herhangi bir web browser ile açtığınızda kodumuzun hangi taraflarını test ettiğimizi ve hangi taraflarını test etmediğimizi görsel bir şekilde görebilirsiniz. Kırmızı ile vurgulananlar test tarafından ele alınmadığını anlamına gelir.
+Oluşan cover_out.html dosyasını herhangi bir web browser ile açtığınızda kodumuzun hangi taraflarını test ettiğimizi ve hangi taraflarını test etmediğimizi görsel bir şekilde görebilirsiniz.
 
 ![Image of Cover](https://github.com/bdemirpolat/unit-test/blob/go-test-basics/images/cover_out_result.png)
+
+Kırmızı ile vurgulananlar test tarafından ele alınmadığını anlamına gelir. Yukarıdaki sonuçta gördüğümüz gibi `sayHello` fonksiyonumuza name argümanını boş gönderdiğimizde olan testi yazmadığımızı bize belirtiyor. Bu sayede code coverage eksik taraflarını görüp test coverage sonuçlarımızı artırabilriiz.
 
 
 # Golang testleri çalıştırma komutları
