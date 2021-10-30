@@ -38,21 +38,8 @@ import (
 // Uygulamada yazdığımı tüm testleri go test komutunu ile çalıştırıyoruz
 // Daha fazla bilgi ile test sonuçlarını yazdırmak için go test -v (verbose)
 // Test içinde loglama yapmak için t.Log ya da t.Logf kullanabiliriz
-func Test_SayHello_Returns_Name_When_Send_Valid_Argument(t *testing.T) {
-	name := "Mert"
-	expected := fmt.Sprintf("Hello %s!", name)
-	result := sayHello(name)
-
-	if result != expected {
-		t.Errorf("\"sayHello(%s)\" failed, expected -> %v, got -> %v", name, expected, result)
-	} else {
-		t.Logf("\"sayHello(%s)\" succeded, expected -> %v, got -> %v", name, expected, result)
-	}
-}
-
-// Fail'e örnek olsun diye aynı testi bu sefer name lengthi 5 ten büyük bir isim girerek deniyoruz
-// func Test_SayHello_Returns_Short_Name_When_Send_Argument_Len_Bigger_Then_Five(t *testing.T) {
-// 	name := "Abdullah"
+// func Test_SayHello_Returns_Name_When_Send_Valid_Argument(t *testing.T) {
+// 	name := "Yemeksepeti"
 // 	expected := fmt.Sprintf("Hello %s!", name)
 // 	result := sayHello(name)
 
@@ -61,15 +48,62 @@ func Test_SayHello_Returns_Name_When_Send_Valid_Argument(t *testing.T) {
 // 	} else {
 // 		t.Logf("\"sayHello(%s)\" succeded, expected -> %v, got -> %v", name, expected, result)
 // 	}
+
 // }
 
-func Test_SayHello_Returns_Anonymous_When_Send_Empty_Argument(t *testing.T) {
-	name := ""
-	expected := "Hello Anonymous!"
-	result := sayHello(name)
-	if result != expected {
-		t.Errorf("\"sayHello(%s)\" failed, expected -> %v, got -> %v", name, expected, result)
-	} else {
-		t.Logf("\"sayHello(%s)\" succeded, expected -> %v, got -> %v", name, expected, result)
+func Test_SayHello_Valid_Argument(t *testing.T) {
+	inputs := []struct {
+		name   string
+		result string
+	}{
+		{name: "Yemeksepeti", result: "Hello Yemeksepeti!"},
+		{name: "Banabi", result: "Hello Banabi!"},
+		{name: "Yemek", result: "Hello Yemek!"},
+	}
+
+	for _, item := range inputs {
+
+		result := sayHello(item.name)
+		if result != item.result {
+			t.Errorf("\"sayHello('%s')\" failed, expected -> %v, got -> %v", item.name, item.result, result)
+		} else {
+			t.Logf("\"sayHello('%s')\" succeded, expected -> %v, got -> %v", item.name, item.result, result)
+		}
 	}
 }
+
+func Test_SayGoodBye(t *testing.T) {
+	name := "Yemeksepeti"
+	expected := fmt.Sprintf("Bye Bye %s!", name)
+	result := sayGoodBye(name)
+
+	if result != expected {
+		t.Errorf("\"sayGoodBye(%s)\" failed, expected -> %v, got -> %v", name, expected, result)
+	} else {
+		t.Logf("\"sayGoodBye(%s)\" succeded, expected -> %v, got -> %v", name, expected, result)
+	}
+}
+
+// Fail'e örnek olsun diye aynı testi bu sefer name lengthi 5 ten büyük bir isim girerek deniyoruz
+// func TestSayHelloShrinkName(t *testing.T) {
+// 	name := "Yemeksepeti"
+// 	expected := fmt.Sprintf("Hello %s!", name)
+// 	result := sayHelloShrinkName(name)
+
+// 	if result != expected {
+// 		t.Errorf("\"sayHello(%s)\" failed, expected -> %v, got -> %v", name, expected, result)
+// 	} else {
+// 		t.Logf("\"sayHello(%s)\" succeded, expected -> %v, got -> %v", name, expected, result)
+// 	}
+// }
+
+// func Test_SayHello_Returns_Anonymous_When_Send_Empty_Argument(t *testing.T) {
+// 	name := ""
+// 	expected := "Hello Anonymous!"
+// 	result := sayHello(name)
+// 	if result != expected {
+// 		t.Errorf("\"sayHello(%s)\" failed, expected -> %v, got -> %v", name, expected, result)
+// 	} else {
+// 		t.Logf("\"sayHello(%s)\" succeded, expected -> %v, got -> %v", name, expected, result)
+// 	}
+// }
