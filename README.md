@@ -168,7 +168,6 @@ PASS
 Test_SayHello_Valid_Argument fonksiyonunu Table-Driven Test yaklaşımına çevirelim. Input adında bir struct array tanımlıyoruz ve test etmek istediğimiz girdileri ve girdilerden beklenen sonucu array içine alıyoruz. Artık foor-loop iterasyonu ile her bir elemanı test edebiliriz.
 
 ```
-
 func Test_SayHello_Valid_Argument(t *testing.T) {
 	inputs := []struct {
 		name   string
@@ -183,9 +182,9 @@ func Test_SayHello_Valid_Argument(t *testing.T) {
 
 		result := sayHello(item.name)
 		if result != item.result {
-			t.Errorf("\"sayHello(%s)\" failed, expected -> %v, got -> %v", item, item.result, result)
+			t.Errorf("\"sayHello('%s')\" failed, expected -> %v, got -> %v", item.name, item.result, result)
 		} else {
-			t.Logf("\"sayHello(%s)\" succeded, expected -> %v, got -> %v", item, item.result, result)
+			t.Logf("\"sayHello('%s')\" succeded, expected -> %v, got -> %v", item.name, item.result, result)
 		}
 	}
 }
@@ -194,12 +193,12 @@ func Test_SayHello_Valid_Argument(t *testing.T) {
 `go test -v -run=Test_SayHello_Valid_Argument` komutunu çalıştırdıktan sonra aşağıdaki sonucu elde edeceğiz.
 ```
 === RUN   Test_SayHello_Valid_Argument
-    greeting_test.go:65: "sayHello(Yemeksepeti)" succeded, expected -> Hello Yemeksepeti!, got -> Hello Yemeksepeti!
-    greeting_test.go:65: "sayHello(Banabi)" succeded, expected -> Hello Banabi!, got -> Hello Banabi!
-    greeting_test.go:65: "sayHello(Yemek)" succeded, expected -> Hello Yemek!, got -> Hello Yemek!
+    greeting_test.go:70: "sayHello('Yemeksepeti')" succeded, expected -> Hello Yemeksepeti!, got -> Hello Yemeksepeti!
+    greeting_test.go:70: "sayHello('Banabi')" succeded, expected -> Hello Banabi!, got -> Hello Banabi!
+    greeting_test.go:70: "sayHello('Yemek')" succeded, expected -> Hello Yemek!, got -> Hello Yemek!
 --- PASS: Test_SayHello_Valid_Argument (0.00s)
 PASS
-ok      github.com/bdemirpolat/unit-test        0.441s
+ok      github.com/bdemirpolat/unit-test        0.473s
 ```
 
 Belirli bir *_test.go dosyasını test edebiliriz. Ancak derleme sırasında test dosyamızın ihtiyacı olan package varsa onu da dahil etmemiz gerekiyor.
@@ -229,8 +228,43 @@ ok      command-line-arguments  0.209s
 ```
 
 # Test Coverage
-Uygulama içinde yazdığımız kodun test yüzdesini sağlar. 
-Bu sayede yazdığımız kodun hangi taraflarını test etmediğimiz görebiliriz.
+Uygulama içinde yazdığımız kodun test yüzdesinin ölçümüdür. Yazdığımız testlerin kodumuzun ne kadarını kapsadığını bilmek önemlidir. Bu sayede kodun hangi taraflarını test ettiğimizi ve hangi taraflarını test etmediğimiz öğrenebiliriz.
+
+Go built-in gelen özelliği sayesinde kod kapsamını kontrol etmemizi sağlıyor.
+
+`go test -cover` komutunu çalıştırıdğımızda aşağıdaki sonucu alacağız.
+
+```
+ok      command-line-arguments  0.206s  coverage: 66.7% of statements
+```
+Testlerimiz başarılı bir şekilde geçti ama yazdığımızın kodun %66.7 si test tarafından ele alınmış. Bu noktada neyi gözden kaçırdığımızı bilmemiz gerekiyor.
+
+Go -coverprofile flag'i ile bizlere test kapsam sonuçlarını bir dosyaya aktarmamızı sağlar. Bunun go test komutu ile -coverprofile flag'ini birleştirmemiz gerekiyor.
+
+`go test -coverprofile=cover_out` komutunu çalıştırıdğımızda geçerli dizinde cover_out dosyası oluşur.
+
+Go projemizin dosya yapısı
+* unit-test
+     * cover_out (coverage data)
+     * greeting_test.go
+     * greeting.go
+     * main.go
+
+Oluşan dosyayı bizim için daha anlamlı hale getirebiliriz. Go'nun built-in gelen `go tool` komutu ile oluşan cover_out dosyasını html formata dönüştürerek web browser üzerinde görüntülememizi sağlar.
+
+`go tool cover -html=cover_out -o cover_out.html` komutunu çalıştırdığımızda geçerli dizinde cover_out.html dosyasının oluştuğunu göreceksiniz. 
+
+Go projemizin dosya yapısı
+* unit-test
+     * cover_out (coverage data)
+     * cover_out.html
+     * greeting_test.go
+     * greeting.go
+     * main.go
+
+Oluşan cover_out.html dosyasını herhangi bir web browser ile açtığınızda kodumuzun hangi taraflarını test ettiğimizi ve hangi taraflarını test etmediğimizi görsel bir şekilde görebilirsiniz. Kırmızı ile vurgulananlar test tarafından ele alınmadığını anlamına gelir.
+![Image of Cover](https://octodex.github.com/images/cover_out.png)
+
 
 # Golang testleri çalıştırma komutları
 * go test . -> geçerli dizindeki testleri run eder
