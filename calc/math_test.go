@@ -1,6 +1,9 @@
 package calc
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 /*
 	Working test in Go Module
@@ -39,6 +42,32 @@ func Test_Math_Sum(t *testing.T) {
 		t.Logf("\"Sum(1, 2, 3)\" succeded, expected -> %v, got -> %v", expected, result)
 
 	}
+}
+
+// Benchmarking ile unit componentlerimizin performansını ölçümleyebiliriz.
+// Bu sayede fonksiyonda yaptığımız değişiklerin etkisini ölçebiliriz.
+// Bu sayede Go kaynak kodumuzun optimize edilmesi gereken kısımları ortaya çıkarabiliriz.
+// go test komutu ile -bench flag'i birleştirdiğimizde geçerli dizinde olan Benchmark testlerimizi sırayla çalıştırır
+// Benchmark b.N kere çalışır. N ise integer değerindedir ve ayarlanabilen bir tamsayıdır
+// go test -bench=. komutu ile dosyadaki her bir benchmark execute eder
+// go test -bench=Sum komutu ile belirli benchmark tesitini execute eder
+//
+func BenchmarkSum(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Sum(5, 5)
+	}
+}
+
+// Go kodumuzu örneklerle dokümante edebiliriz
+// Go dokümantasyona odaklanmış bir dildir ve örnek kod hem dokümantasyona hem de teste başka bir boyut katar
+// Örnek'ler kullanıcılara kodun nasıl kullanılacağını göstermelidir.
+// Örnekler ge test komutu tarafından özel olarak  işlenir
+// go test -v komutu çalıştırdığımızda ExampleSum() fonksiyonunuda çalışır
+// Bu özellik sayesinde dokümante yaklaşımını geliştirir ve unit testi daha sağlam hale getir
+// Output ile beklenen sonucu belirtmek için kullanırız
+func ExampleSum() {
+	fmt.Println(Sum(5, 5))
+	// Output: 10
 }
 
 // error handle etme
