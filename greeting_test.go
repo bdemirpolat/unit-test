@@ -84,6 +84,17 @@ func Test_SayGoodBye(t *testing.T) {
 	}
 }
 
+func BenchmarkSayHello(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		sayHello("Yemeksepeti")
+	}
+}
+
+func Example_sayHello() {
+	fmt.Println(sayHello("Yemeksepeti"))
+	// Output: Hello Yemeksepeti!
+}
+
 // Fail'e örnek olsun diye aynı testi bu sefer name lengthi 5 ten büyük bir isim girerek deniyoruz
 // func TestSayHelloShrinkName(t *testing.T) {
 // 	name := "Yemeksepeti"
