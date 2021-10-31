@@ -306,3 +306,33 @@ Benchmark sonucu bize iterasyonun 11.806.116 kez çalıştığını ve her bir i
 Birden fazla Benchmark fonksiyonlar arasında  belirli bir Benchmark çalıştırmak için
 * `go test -bench=BenchmarkSayHello`
 
+# Example
+Go kodumuzu Example yaklaşımı ile dokümente edebiliriz. Go dokümantasyona odaklanmış bir dildir ve örnek kod hem dokümantasyona hem de teste başka bir boyut katar.Example yaklaşımı mevcut olan bir fonksiyona dayanmaktadır. Kullanıcılara kodun nasıl kullanılacağını gösterir ve `ge test` komutu tarafından özel olarak işlenirler. Output ile beklenen sonucu belirtmek için kullanırız
+
+sayHello fonksiyonumuza Example yaklaşımını ekleyerek dokümente edelim
+```
+func Example_sayHello() {
+	fmt.Println(sayHello("Yemeksepeti"))
+	// Output: Hello Yemeksepeti!
+}
+```
+
+`go test -v` komutunu çalıştırığımızda Example_sayHello testinin de çalıştığını görüyoruz.
+```
+=== RUN   Test_SayHello_Valid_Argument
+    greeting_test.go:70: "sayHello('Yemeksepeti')" succeded, expected -> Hello Yemeksepeti!, got -> Hello Yemeksepeti!
+    greeting_test.go:70: "sayHello('Banabi')" succeded, expected -> Hello Banabi!, got -> Hello Banabi!
+    greeting_test.go:70: "sayHello('Yemek')" succeded, expected -> Hello Yemek!, got -> Hello Yemek!
+--- PASS: Test_SayHello_Valid_Argument (0.00s)
+=== RUN   Test_SayGoodBye
+    greeting_test.go:83: "sayGoodBye(Yemeksepeti)" succeded, expected -> Bye Bye Yemeksepeti!, got -> Bye Bye Yemeksepeti!
+--- PASS: Test_SayGoodBye (0.00s)
+=== RUN   Example_sayHello
+--- PASS: Example_sayHello (0.00s)
+PASS
+ok      command-line-arguments  0.484s
+```
+*Bu özellik fonsiyonların/metotların dokümante yaklaşımını geliştirir ve unit testi daha sağlam hale getirir.
+
+
+
