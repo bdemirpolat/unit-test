@@ -28,6 +28,11 @@ func TestSayHello(t *testing.T) {
  * **t.Logf** test sırasında loglamak istediğimiz bilgileri istediğimiz formatta dönüştürmek için kullanırız
  * **t.Error** test hatalarını istediğimiz formatta belirtek için kullanırız
  * **t.Errorf** test hatalarını belirtek için kullanırız
+ 
+# Golang testleri çalıştırma komutları
+* go test . -> geçerli dizindeki testleri run eder
+* go test ./calc -> calc dizinindeki testleri run eder
+* go test ./... modül içindeki tüm testleri run eder
 
 # Test Yazımı
 Go projemizi oluşturduktan sonra greeting.go adında bir dosya oluşturuyoruz. Test edeceğimiz fonksiyon main package altında olacak
