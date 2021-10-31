@@ -268,8 +268,36 @@ Oluşan cover_out.html dosyasını herhangi bir web browser ile açtığınızda
 
 Kırmızı ile vurgulananlar test tarafından ele alınmadığını anlamına gelir. Yukarıdaki sonuçta gördüğümüz gibi `sayHello` fonksiyonumuza name argümanını boş gönderdiğimizde olan testi yazmadığımızı bize belirtiyor. Bu sayede code coverage eksik taraflarını görüp test coverage sonuçlarımızı artırabilriiz.
 
+# Benchmark
+Benchmarking ile fonksiyonlarımızın performansını ölçümleyebilir ve fonksiyonda yaptığımız değişiklerin etkisini görebilmemize olanak sağlar. Bu sayede kaynak kodunuzun optimize edilmeye değer kısımlarını ortaya çıkarabilirsiniz.
 
-# Golang testleri çalıştırma komutları
-* go test . -> geçerli dizindeki testleri run eder
-* go test ./calc -> calc dizinindeki testleri run eder
-* go test ./... modül içindeki tüm testleri run eder
+## Go'da Benchmark nasıl yapılır?
+Aynı unit test yazımında fonksiyonların başına Test ön adı gibi Benchmark yapmak istediğimiz fonksiyonun adını Benchmark ön adı ile başlatmamız gerekiyor. 
+
+`sayHello` fonksiyonum için Benchmark oluşturalım
+```
+func BenchmarkSayHello(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		sayHello("Yemeksepeti")
+	}
+}
+```
+* Benchmark fonksiyonları `testing.B` argümanı alır.
+* Benchmark fonksiyonlar  `testing.B` argümanın sağladığı N kez çalışmak zorundadır. (N int bir değerdir ve Go tarafından yönetilir)
+* Benchmark sonuçlarını görebilmek için `go test` komutuna `-bench` flag'i eklenir. 
+
+`go test -bench=.` komutunu çalıştırdığımızda aşağıdaki sonucu elde edeceğiz (. ile dosyadaki bütün Benchmark çalışır).
+```
+goos: darwin
+goarch: amd64
+pkg: github.com/bdemirpolat/unit-test
+cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+BenchmarkSayHello-12            11806116               101.2 ns/op
+PASS
+ok      github.com/bdemirpolat/unit-test        2.764s
+```
+Benchmark sonucu bize iterasyonun 11.806.116 kez çalıştığını ve her bir iterasyon 101.2 ns/op olduğunu açıklıyor.
+
+Birden fazla Benchmark fonksiyonlar arasında  belirli bir Benchmark çalıştırmak için
+* `go test -bench=BenchmarkSayHello`
+
